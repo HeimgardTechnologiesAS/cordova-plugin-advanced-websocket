@@ -7,6 +7,7 @@
 - (void)pluginInitialize {
 }
 
+/*
 - (void)echo:(CDVInvokedUrlCommand *)command {
   NSString* phrase = [command.arguments objectAtIndex:0];
   NSLog(@"%@", phrase);
@@ -24,5 +25,7 @@
   CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:iso8601String];
   [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
+*/
+
 
 @end
