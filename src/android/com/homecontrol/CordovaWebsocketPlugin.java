@@ -231,8 +231,6 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
 
                 successResult.put("webSocketId", this.webSocketId);
                 successResult.put("code", response.code());
-                successResult.put("message", response.message());
-                successResult.put("body", response.body().string());
 
                 this.callbackContext.success(successResult);
             } catch (JSONException e) {
@@ -309,8 +307,7 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
                     failResult.put("exception", t.getMessage()); 
                 } else if (response != null) {
                     failResult.put("code", response.code());
-                    failResult.put("message", response.message());
-                    failResult.put("body", response.body().string());
+                    failResult.put("reason", response.message());
                 }
 
                 this.callbackContext.error(failResult);

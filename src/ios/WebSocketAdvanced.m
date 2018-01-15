@@ -72,8 +72,6 @@
     NSMutableDictionary* successResult = [[NSMutableDictionary alloc] init];
     [successResult setObject:self.webSocketId                                forKey:@"webSocketId"];
     [successResult setObject:[NSNumber numberWithInteger:SRStatusCodeNormal] forKey:@"code"];
-    [successResult setObject:@""                                             forKey:@"message"];
-    [successResult setObject:@""                                             forKey:@"body"];
 
     CDVPluginResult* pluginResult =[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:successResult];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
@@ -120,8 +118,7 @@
 
         [errorResult setObject:self.webSocketId                                forKey:@"webSocketId"];
         [errorResult setObject:[NSNumber numberWithInteger:SRStatusCodeNormal] forKey:@"code"];
-        [errorResult setObject:reason                                          forKey:@"message"];
-        [errorResult setObject:@""                                             forKey:@"body"];
+        [errorResult setObject:reason                                          forKey:@"reason"];
         
         CDVPluginResult* pluginErrorResult =[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorResult];
         [_commandDelegate sendPluginResult:pluginErrorResult callbackId:_callbackId];
