@@ -8,7 +8,7 @@
                 callbackId:(NSString*)callbackId;
 {
     NSString* wsUrl =           [wsOptions valueForKey:@"url"];
-    NSNumber* timeout =         [wsOptions valueForKey:@"timeout"]?: 0;
+    NSNumber* timeout =         [wsOptions valueForKey:@"timeout"];
     NSDictionary* wsHeaders =   [wsOptions valueForKey:@"headers"];
     BOOL acceptAllCerts =       [wsOptions valueForKey:@"acceptAllCerts"];
 
@@ -25,10 +25,14 @@
     _webSocket = [[SRWebSocket alloc] initWithURLRequest:request
                                         protocols:nil
                                         allowsUntrustedSSLCertificates:acceptAllCerts];
-    [_webSocket open];
+    
     _webSocket.delegate = self;
     _commandDelegate = commandDelegate;
     _callbackId = callbackId;
+
+    [_commandDelegate runInBackground:^{
+        [_webSocket open];
+    }];
     return self;
 }
 
@@ -77,11 +81,11 @@
 
 - (void)webSocket:(SRWebSocket*)webSocket didFailWithError:(NSError*)error;
 {
-    NSMutableDictionary* successResult = [[NSMutableDictionary alloc] init];
-    [successResult setObject:self.webSocketId  forKey:@"webSocketId"];
-    [successResult setObject:error.domain      forKey:@"exception"];
+    NSMutableDictionary* errorResult = [[NSMutableDictionary alloc] init];
+    [errorResult setObject:self.webSocketId  forKey:@"webSocketId"];
+    [errorResult setObject:error.domain      forKey:@"exception"];
 
-    CDVPluginResult* pluginResult =[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:successResult];
+    CDVPluginResult* pluginResult =[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorResult];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
 
     _webSocket = nil;
