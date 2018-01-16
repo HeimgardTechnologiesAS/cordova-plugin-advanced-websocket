@@ -18,12 +18,17 @@
       </js-module>
       <config-file target="res/xml/config.xml" parent="/*">
         <feature name="CordovaWebsocketPlugin">
-          <param name="android-package" value="com.example.CordovaWebsocketPlugin" />
+          <param name="android-package" value="com.homecontrol.CordovaWebsocketPlugin" />
           <param name="onload" value="true" />
         </feature>
       </config-file>
+       <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET"/>
+        </config-file>
 
-      <source-file src="src/android/com/example/CordovaWebsocketPlugin.java" target-dir="src/com/example/" />
+      <source-file src="src/android/com/homecontrol/CordovaWebsocketPlugin.java" target-dir="src/com/homecontrol/" />
+
+      <framework src="com.squareup.okhttp3:okhttp:3.9.1" />
     </platform>
 
     <!-- ios -->
@@ -38,7 +43,11 @@
             </feature>
         </config-file>
 
+        <header-file src="src/ios/WebSocketAdvanced.h" />
         <header-file src="src/ios/CordovaWebsocketPlugin.h" />
+        <source-file src="src/ios/WebSocketAdvanced.m" />
         <source-file src="src/ios/CordovaWebsocketPlugin.m" />
+        
+        <framework src="SocketRocket" type="podspec" spec="0.5.1" />
     </platform>
 </plugin>
