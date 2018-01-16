@@ -70,8 +70,8 @@
 - (void)webSocketDidOpen:(SRWebSocket*)webSocket;
 {
     NSMutableDictionary* successResult = [[NSMutableDictionary alloc] init];
-    [successResult setObject:self.webSocketId                                forKey:@"webSocketId"];
-    [successResult setObject:[NSNumber numberWithInteger:SRStatusCodeNormal] forKey:@"code"];
+    [successResult setValue:self.webSocketId                                forKey:@"webSocketId"];
+    [successResult setValue:[NSNumber numberWithInteger:SRStatusCodeNormal] forKey:@"code"];
 
     CDVPluginResult* pluginResult =[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:successResult];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
@@ -80,8 +80,8 @@
 - (void)webSocket:(SRWebSocket*)webSocket didFailWithError:(NSError*)error;
 {
     NSMutableDictionary* errorResult = [[NSMutableDictionary alloc] init];
-    [errorResult setObject:self.webSocketId  forKey:@"webSocketId"];
-    [errorResult setObject:error.domain      forKey:@"exception"];
+    [errorResult setValue:self.webSocketId  forKey:@"webSocketId"];
+    [errorResult setValue:error.domain      forKey:@"exception"];
 
     CDVPluginResult* pluginResult =[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorResult];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
@@ -92,9 +92,9 @@
 - (void)webSocket:(SRWebSocket*)webSocket didReceiveMessage:(id)message;
 {
     NSMutableDictionary* callbackResult = [[NSMutableDictionary alloc] init];
-    [callbackResult setObject:@"onMessage"      forKey:@"callbackMethod"];
-    [callbackResult setObject:self.webSocketId  forKey:@"webSocketId"];
-    [callbackResult setObject:message           forKey:@"message"];
+    [callbackResult setValue:@"onMessage"      forKey:@"callbackMethod"];
+    [callbackResult setValue:self.webSocketId  forKey:@"webSocketId"];
+    [callbackResult setValue:message           forKey:@"message"];
 
     CDVPluginResult* pluginResult =[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:callbackResult];
     [pluginResult setKeepCallbackAsBool:YES];
@@ -104,10 +104,10 @@
 - (void)webSocket:(SRWebSocket*)webSocket didCloseWithCode:(NSInteger)code reason:(NSString*)reason wasClean:(BOOL)wasClean;
 {
     NSMutableDictionary* callbackResult = [[NSMutableDictionary alloc] init];
-    [callbackResult setObject:@"onClose"                        forKey:@"callbackMethod"];
-    [callbackResult setObject:self.webSocketId                  forKey:@"webSocketId"];
-    [callbackResult setObject:[NSNumber numberWithInteger:code] forKey:@"code"];
-    [callbackResult setObject:reason                            forKey:@"reason"];
+    [callbackResult setValue:@"onClose"                        forKey:@"callbackMethod"];
+    [callbackResult setValue:self.webSocketId                  forKey:@"webSocketId"];
+    [callbackResult setValue:[NSNumber numberWithInteger:code] forKey:@"code"];
+    [callbackResult setValue:reason                            forKey:@"reason"];
 
     CDVPluginResult* pluginResult =[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:callbackResult];
     [pluginResult setKeepCallbackAsBool:YES];
@@ -116,9 +116,9 @@
     @try {
         NSMutableDictionary* errorResult = [[NSMutableDictionary alloc] init];
 
-        [errorResult setObject:self.webSocketId                                forKey:@"webSocketId"];
-        [errorResult setObject:[NSNumber numberWithInteger:SRStatusCodeNormal] forKey:@"code"];
-        [errorResult setObject:reason                                          forKey:@"reason"];
+        [errorResult setValue:self.webSocketId                                forKey:@"webSocketId"];
+        [errorResult setValue:[NSNumber numberWithInteger:SRStatusCodeNormal] forKey:@"code"];
+        [errorResult setValue:reason                                          forKey:@"reason"];
         
         CDVPluginResult* pluginErrorResult =[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorResult];
         [_commandDelegate sendPluginResult:pluginErrorResult callbackId:_callbackId];
