@@ -28,7 +28,10 @@
 
       <source-file src="src/android/com/homecontrol/CordovaWebsocketPlugin.java" target-dir="src/com/homecontrol/" />
 
-      <framework src="com.squareup.okhttp3:okhttp:3.9.1" />
+      <!--framework src="com.squareup.okhttp3:okhttp:3.9.1" /-->
+      <lib-file src="libs/android/okhttp-3.10.0-SNAPSHOT.jar" />
+
+      <framework src="com.squareup.okio:okio:1.13.0" />      
     </platform>
 
     <!-- ios -->
@@ -51,3 +54,4 @@
         <framework src="SocketRocket" type="podspec" spec="0.5.1" />
     </platform>
 </plugin>
+        

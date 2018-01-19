@@ -78,11 +78,8 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
     }
 
     private void closeAllSockets() {
-        for(Map.Entry<String, WebSocketAdvanced> entry : this.webSockets.entrySet()) {
-            String webSocketId = entry.getKey();
-            WebSocketAdvanced webSocket = entry.getValue();
-        
-            webSocket.close(1000, "Disconnect");
+        for(WebSocketAdvanced ws : this.webSockets.values()) {
+            ws.close(1000, "Disconnect");
         }
         this.webSockets.clear();
     }
@@ -151,6 +148,7 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
                 
                 String wsUrl =              wsOptions.getString("url");
                 int timeout =               wsOptions.optInt("timeout", 0);
+                int pingInterval =          wsOptions.optInt("pingInterval", 0);
                 JSONObject wsHeaders =      wsOptions.optJSONObject("headers");
                 boolean acceptAllCerts =    wsOptions.optBoolean("acceptAllCerts", false);
                 
@@ -159,6 +157,7 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
                 Request.Builder requestBuilder = new Request.Builder();
 
                 clientBuilder.readTimeout(timeout, TimeUnit.MILLISECONDS);
+                clientBuilder.pingInterval(pingInterval, TimeUnit.MILLISECONDS);
                 
                 if (wsUrl.startsWith("wss://") && acceptAllCerts) {
                     try {
@@ -235,8 +234,6 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
                 this.callbackContext.success(successResult);
             } catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
             }
         }
     
@@ -248,9 +245,8 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
                 callbackResult.put("webSocketId", this.webSocketId);
                 callbackResult.put("message", text);
 
-                PluginResult result = new PluginResult(Status.OK, callbackResult);
-                
                 if (this.recvCallbackContext != null) {
+                    PluginResult result = new PluginResult(Status.OK, callbackResult);
                     result.setKeepCallback(true);
                     this.recvCallbackContext.sendPluginResult(result);
                 }
@@ -267,9 +263,8 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
                 callbackResult.put("webSocketId", this.webSocketId);
                 callbackResult.put("message", bytes.toString());
 
-                PluginResult result = new PluginResult(Status.OK, callbackResult);
-                
                 if (this.recvCallbackContext != null) {
+                    PluginResult result = new PluginResult(Status.OK, callbackResult);
                     result.setKeepCallback(true);
                     this.recvCallbackContext.sendPluginResult(result);
                 }
@@ -287,9 +282,8 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
                 callbackResult.put("code", code);
                 callbackResult.put("reason", reason);
 
-                PluginResult result = new PluginResult(Status.OK, callbackResult);
-                
                 if (this.recvCallbackContext != null) {
+                    PluginResult result = new PluginResult(Status.OK, callbackResult);
                     result.setKeepCallback(true);
                     this.recvCallbackContext.sendPluginResult(result);
                 }
@@ -304,16 +298,23 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
 
                 failResult.put("webSocketId", this.webSocketId);
                 if (t != null) {
+                    failResult.put("code", 1006); // unexpected close
                     failResult.put("exception", t.getMessage()); 
                 } else if (response != null) {
                     failResult.put("code", response.code());
                     failResult.put("reason", response.message());
                 }
-
-                this.callbackContext.error(failResult);
+                
+                if (!this.callbackContext.isFinished()) {
+                    this.callbackContext.error(failResult);
+                }
+                if (this.recvCallbackContext != null) {
+                    failResult.put("callbackMethod", "onFail");
+                    PluginResult result = new PluginResult(Status.ERROR, failResult);
+                    result.setKeepCallback(true);
+                    this.recvCallbackContext.sendPluginResult(result);
+                }
             } catch (JSONException e) {
-                Log.e(TAG, e.getMessage());
-            } catch (IOException e) {
                 Log.e(TAG, e.getMessage());
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());

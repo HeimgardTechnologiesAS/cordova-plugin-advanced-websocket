@@ -16,15 +16,15 @@ var CordovaWebsocketPlugin = {
                 success(data);
             }
 
-            exec(listener, null, PLUGIN_NAME, 'wsAddListeners', [data.webSocketId]);
+            exec(listener, listener, PLUGIN_NAME, 'wsAddListeners', [data.webSocketId]);
         }
         exec(connectSuccess, error, PLUGIN_NAME, 'wsConnect', [wsOptions]);
     },
-    wsSend: function(wsId, message, success, error) {
-        exec(success, error, PLUGIN_NAME, 'wsSend', [wsId, message]);
+    wsSend: function(wsId, message) {
+        exec(null, null, PLUGIN_NAME, 'wsSend', [wsId, message]);
     },
-    wsClose: function(wsId, code, reason, success, error) {
-        exec(success, error, PLUGIN_NAME, 'wsClose', [wsId, code, reason]);
+    wsClose: function(wsId, code, reason) {
+        exec(null, null, PLUGIN_NAME, 'wsClose', [wsId, code, reason]);
     }
 };
 

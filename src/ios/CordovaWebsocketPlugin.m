@@ -22,7 +22,9 @@
 {
     NSString* webSocketId = [command argumentAtIndex:0];
     WebSocketAdvanced* ws = [webSockets valueForKey:webSocketId];
-    [ws wsAddListeners:command.callbackId];
+    if (ws != nil) {
+        [ws wsAddListeners:command.callbackId];
+    }
 }
 
 - (void)wsSend:(CDVInvokedUrlCommand*)command;
@@ -30,7 +32,9 @@
     NSString* webSocketId = [command argumentAtIndex:0];
     NSString* message = [command argumentAtIndex:1];
     WebSocketAdvanced* ws = [webSockets valueForKey:webSocketId];
-    [ws wsSendMessage:message];
+    if (ws != nil) {
+        [ws wsSendMessage:message];
+    }
 }
 
 - (void)wsClose:(CDVInvokedUrlCommand*)command;
@@ -39,7 +43,9 @@
     NSNumber* code = [command argumentAtIndex:1];
     NSString* reason = [command argumentAtIndex:2];
     WebSocketAdvanced* ws = [webSockets valueForKey:webSocketId];
-    [ws wsClose:code.integerValue reason:reason];
+    if (ws != nil) {
+        [ws wsClose:code.integerValue reason:reason];
+    }
 }
 
 - (void)dealloc;

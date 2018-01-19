@@ -6,6 +6,10 @@
     id<CDVCommandDelegate> _commandDelegate;
     NSString* _callbackId;
     NSString* _recvCallbackId;
+    NSTimer* _pingTimer;
+    NSTimeInterval _pingInterval;
+    NSInteger _pingCount;
+    NSInteger _pongCount;
 }
 @property NSString* webSocketId;
 
