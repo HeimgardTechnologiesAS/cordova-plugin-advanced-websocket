@@ -8,5 +8,7 @@
       "ios"
     ]
   },
-  "description": "Cordova Plugin for using WebSockets"
+  "description": "Cordova Plugin for using WebSockets",
+  "author": "HomeControl AS",
+  "license": "MIT"
 }
