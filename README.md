@@ -116,7 +116,7 @@ CordovaWebsocketPlugin.wsSend(webSocketId, "Hello World!");
 
 Close WebSocket using __webSocketId__ as a reference, specifying closing code and reason.
 ```
-CordovaWebsocketPlugin.wsSend(webSocketId, code, reason);
+CordovaWebsocketPlugin.wsClose(webSocketId, code, reason);
 ```
 
 ### Parameters
@@ -128,5 +128,5 @@ CordovaWebsocketPlugin.wsSend(webSocketId, code, reason);
 ### Quick Example
 
 ```
-CordovaWebsocketPlugin.wsSend(webSocketId, 1000, "I'm done!");
+CordovaWebsocketPlugin.wsClose(webSocketId, 1000, "I'm done!");
 ```
