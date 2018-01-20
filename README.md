@@ -26,7 +26,7 @@ pod setup --verbose
 
 ### Cordova
 
-    $ cordova plugin add https://github.com/HomeControlAS/cordova-plugin-advanced-websocket.git
+    $ cordova plugin add cordova-plugin-advanced-websocket
 
 # API
 
