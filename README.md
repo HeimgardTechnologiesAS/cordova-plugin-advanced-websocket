@@ -39,7 +39,7 @@ pod setup --verbose
 ## wsConnect
 
 Connecto to WebSocket using options
-```
+```js
 CordovaWebsocketPlugin.wsConnect(options, receiveCallback, successCallback, failureCallback);
 ```
 
@@ -68,7 +68,7 @@ __webSocketId__ is unique reference to your WebSocket which is needed for later 
 
 ### Quick Example
 
-```
+```js
 var accessToken = "abcdefghiklmnopqrstuvwxyz";
 var wsOptions = {
     url: "wss://echo.websocket.org",
@@ -97,7 +97,7 @@ CordovaWebsocketPlugin.wsConnect(wsOptions,
 ## wsSend
 
 Send message to WebSocket using __webSocketId__ as a reference.
-```
+```js
 CordovaWebsocketPlugin.wsSend(webSocketId, message);
 ```
 
@@ -108,14 +108,14 @@ CordovaWebsocketPlugin.wsSend(webSocketId, message);
 
 ### Quick Example
 
-```
+```js
 CordovaWebsocketPlugin.wsSend(webSocketId, "Hello World!");
 ```
 
 ## wsClose
 
 Close WebSocket using __webSocketId__ as a reference, specifying closing code and reason.
-```
+```js
 CordovaWebsocketPlugin.wsClose(webSocketId, code, reason);
 ```
 
@@ -127,6 +127,6 @@ CordovaWebsocketPlugin.wsClose(webSocketId, code, reason);
 
 ### Quick Example
 
-```
+```js
 CordovaWebsocketPlugin.wsClose(webSocketId, 1000, "I'm done!");
 ```

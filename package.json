@@ -12,6 +12,12 @@
     "type": "git",
     "url": "git+https://github.com/HomeControlAS/cordova-plugin-advanced-websocket.git"
   },
+  "keywords": [
+    "cordova",
+    "websocket",
+    "cordova-ios",
+    "cordova-android"
+  ],
   "description": "Cordova Plugin for using WebSockets",
   "author": "HomeControl AS",
   "license": "MIT"
