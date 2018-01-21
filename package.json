@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-advanced-websocket",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "cordova": {
     "id": "cordova-plugin-advanced-websocket",
     "platforms": [
