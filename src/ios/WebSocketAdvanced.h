@@ -10,6 +10,7 @@
     NSTimeInterval _pingInterval;
     NSInteger _pingCount;
     NSInteger _pongCount;
+    BOOL _awaitingPong;
 }
 @property NSString* webSocketId;
 

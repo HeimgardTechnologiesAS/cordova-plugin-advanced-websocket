@@ -36,6 +36,7 @@
 
     _pingCount = 0;
     _pongCount = 0;
+    _awaitingPong = NO;
 
     [_commandDelegate runInBackground:^{
         [_webSocket open];
@@ -72,10 +73,12 @@
 - (void)wsSendPing:(NSData*)data;
 {
     if (_webSocket != nil) {
-        if ((_pingCount - _pongCount) >= 1) {
+        NSInteger failedPing = _awaitingPong ? _pingCount : -1;
+
+        if (failedPing != -1) {
             NSMutableDictionary* errorResult = [[NSMutableDictionary alloc] init];
             NSNumber* code = [NSNumber numberWithInteger:SRStatusCodeAbnormal];
-            NSString* reason = @"Last pong was not received!";
+            NSString* reason = [NSString stringWithFormat:@"Last pong was not received for ping #%ld", failedPing];
             if (_recvCallbackId != nil) {
                 [errorResult setValue:self.webSocketId  forKey:@"webSocketId"];
                 [errorResult setValue:code              forKey:@"code"];
@@ -93,6 +96,7 @@
             return;
         }
         _pingCount++;
+        _awaitingPong = YES;
         [_webSocket sendPing:data];
         NSLog(@"Sent ping #%ld", _pingCount);
     }
@@ -202,6 +206,7 @@
 - (void)webSocket:(SRWebSocket*)webSocket didReceivePong:(nullable NSData*)pongData;
 {
     _pongCount++;
+    _awaitingPong = NO;
     NSLog(@"Received pong #%ld", _pongCount);
 }
 
