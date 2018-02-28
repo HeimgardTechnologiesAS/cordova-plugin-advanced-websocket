@@ -10,7 +10,7 @@ WebSocket plugin that supports custom headers, self-signed certificates, periodi
 
 ### Android
 
-OkHttp library is provided as a custom built jar from latest github code (3.10.0-SNAPSHOT) including some of the fixes that are not yet available in their main branch (needed for ping-pong to work).
+OkHttp library is included as maven dependency with version 3.10.0
 
 ### iOS
 
