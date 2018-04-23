@@ -102,6 +102,11 @@
     }
 }
 
+- (void)wsPingTimer:(NSTimer*)timer;
+{
+    // Timer fired, send ping
+    [self wsSendPing:nil];
+}
 
 #pragma mark - SRWebSocketDelegate
 
@@ -116,12 +121,11 @@
     CDVPluginResult* pluginResult =[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:successResult];
     [_commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
 
-    if (_pingInterval > 0) {
+    if (_pingInterval > 0) { 
+        NSLog(@"Setting up ping timer with ping interval: %f", _pingInterval);
         _pingTimer = [NSTimer scheduledTimerWithTimeInterval:_pingInterval
-                              repeats:YES
-                              block: ^(NSTimer *timer) {
-                                  [self wsSendPing:nil]; 
-                              }];
+                              target:self selector:@selector(wsPingTimer:)
+                              userInfo:nil repeats:YES];
     }
 }
 
