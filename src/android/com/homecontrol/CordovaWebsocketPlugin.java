@@ -74,7 +74,6 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
     @Override
     public void onReset() {
         super.onReset();
-        closeAllSockets();
     }
 
     private void closeAllSockets() {

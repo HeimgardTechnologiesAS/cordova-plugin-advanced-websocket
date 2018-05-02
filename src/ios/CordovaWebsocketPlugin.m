@@ -56,7 +56,6 @@
 - (void)onReset;
 {
     [super onReset];
-    [self _closeAllSockets];
 }
 
 - (void)_closeAllSockets;
