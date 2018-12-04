@@ -216,8 +216,11 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
             this.recvCallbackContext = recvCallbackContext;
             
             if (!this.messageBuffer.isEmpty() && this.flushReceivedBuffer){
-                for(PluginResult message : this.messageBuffer){
+                Iterator<PluginResult> messageIterator = this.messageBuffer.iterator();
+                while(messageIterator.hasNext()){
+                    PluginResult message = messageIterator.next();
                     recvCallbackContext.sendPluginResult(message);
+                    messageIterator.remove();
                 }
             }
         }
