@@ -18,6 +18,7 @@ import java.util.UUID;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
 
 import java.io.IOException;
 
@@ -135,8 +136,10 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
         private WebSocket webSocket;
         private CallbackContext callbackContext;
         private CallbackContext recvCallbackContext = null;
+        private ArrayList<PluginResult> messageBuffer;
         private OkHttpClient client;
         private Request request;
+        private boolean flushReceivedBuffer;
 
         public String webSocketId;
 
@@ -144,12 +147,14 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
             try {
                 this.callbackContext = callbackContext;
                 this.webSocketId = UUID.randomUUID().toString();
-                
+                this.messageBuffer = new ArrayList<PluginResult>();
+
                 String wsUrl =              wsOptions.getString("url");
                 int timeout =               wsOptions.optInt("timeout", 0);
                 int pingInterval =          wsOptions.optInt("pingInterval", 0);
                 JSONObject wsHeaders =      wsOptions.optJSONObject("headers");
                 boolean acceptAllCerts =    wsOptions.optBoolean("acceptAllCerts", false);
+                this.flushReceivedBuffer =  wsOptions.optBoolean("flushReceivedBuffer", true);
                 
                 
                 OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
@@ -209,6 +214,12 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
 
         public void setRecvListener(final CallbackContext recvCallbackContext) {
             this.recvCallbackContext = recvCallbackContext;
+            
+            if (!this.messageBuffer.isEmpty() && this.flushReceivedBuffer){
+                for(PluginResult message : this.messageBuffer){
+                    recvCallbackContext.sendPluginResult(message);
+                }
+            }
         }
 
         public boolean send(String text) {
@@ -243,11 +254,14 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
                 callbackResult.put("callbackMethod", "onMessage");
                 callbackResult.put("webSocketId", this.webSocketId);
                 callbackResult.put("message", text);
+                
+                PluginResult result = new PluginResult(Status.OK, callbackResult);
+                result.setKeepCallback(true);
 
                 if (this.recvCallbackContext != null) {
-                    PluginResult result = new PluginResult(Status.OK, callbackResult);
-                    result.setKeepCallback(true);
                     this.recvCallbackContext.sendPluginResult(result);
+                } else {
+                    this.messageBuffer.add(result);
                 }
             } catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
@@ -262,10 +276,13 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
                 callbackResult.put("webSocketId", this.webSocketId);
                 callbackResult.put("message", bytes.toString());
 
+                PluginResult result = new PluginResult(Status.OK, callbackResult);
+                result.setKeepCallback(true);
+
                 if (this.recvCallbackContext != null) {
-                    PluginResult result = new PluginResult(Status.OK, callbackResult);
-                    result.setKeepCallback(true);
                     this.recvCallbackContext.sendPluginResult(result);
+                } else {
+                    this.messageBuffer.add(result);
                 }
             } catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
