@@ -97,9 +97,10 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
     private void wsAddListeners(JSONArray args, CallbackContext recvCallbackContext) {
         try {
             String webSocketId = args.getString(0);
+            boolean flushRecvBuffer = args.getBoolean(1);
             WebSocketAdvanced ws = this.webSockets.get(webSocketId);
             if (ws != null) {
-                ws.setRecvListener(recvCallbackContext);
+                ws.setRecvListener(recvCallbackContext, flushRecvBuffer);
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
@@ -139,7 +140,6 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
         private ArrayList<PluginResult> messageBuffer;
         private OkHttpClient client;
         private Request request;
-        private boolean flushReceivedBuffer;
 
         public String webSocketId;
 
@@ -154,15 +154,13 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
                 int pingInterval =          wsOptions.optInt("pingInterval", 0);
                 JSONObject wsHeaders =      wsOptions.optJSONObject("headers");
                 boolean acceptAllCerts =    wsOptions.optBoolean("acceptAllCerts", false);
-                this.flushReceivedBuffer =  wsOptions.optBoolean("flushReceivedBuffer", true);
-                
-                
+
                 OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
                 Request.Builder requestBuilder = new Request.Builder();
 
                 clientBuilder.readTimeout(timeout, TimeUnit.MILLISECONDS);
                 clientBuilder.pingInterval(pingInterval, TimeUnit.MILLISECONDS);
-                
+
                 if (wsUrl.startsWith("wss://") && acceptAllCerts) {
                     try {
                         final X509TrustManager gullibleTrustManager = new GullibleTrustManager();
@@ -212,10 +210,10 @@ public class CordovaWebsocketPlugin extends CordovaPlugin {
             }
         }
 
-        public void setRecvListener(final CallbackContext recvCallbackContext) {
+        public void setRecvListener(final CallbackContext recvCallbackContext, boolean flushRecvBuffer) {
             this.recvCallbackContext = recvCallbackContext;
             
-            if (!this.messageBuffer.isEmpty() && this.flushReceivedBuffer){
+            if (!this.messageBuffer.isEmpty() && flushRecvBuffer){
                 Iterator<PluginResult> messageIterator = this.messageBuffer.iterator();
                 while(messageIterator.hasNext()){
                     PluginResult message = messageIterator.next();

@@ -11,7 +11,6 @@
     NSInteger _pingCount;
     NSInteger _pongCount;
     BOOL _awaitingPong;
-    BOOL _flushReceivedBuffer;
     NSMutableArray* _messageBuffer;
 }
 @property NSString* webSocketId;

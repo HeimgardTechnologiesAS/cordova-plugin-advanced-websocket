@@ -12,7 +12,7 @@
     NSNumber* pingInterval =    [wsOptions valueForKey:@"pingInterval"];
     NSDictionary* wsHeaders =   [wsOptions valueForKey:@"headers"];
     BOOL acceptAllCerts =       [wsOptions valueForKey:@"acceptAllCerts"];
-    _flushReceivedBuffer =      [wsOptions valueForKey:@"flushReceivedBuffer"];
+
     _messageBuffer =            [[NSMutableArray alloc] init];
 
     NSTimeInterval timeoutInterval = timeout ? (timeout.doubleValue / 1000) : 0;
@@ -46,11 +46,11 @@
     return self;
 }
 
-- (void)wsAddListeners:(NSString*)recvCallbackId;
+- (void)wsAddListeners:(NSString*)recvCallbackId flushRecvBuffer:(BOOL)flushRecvBuffer;
 {
     _recvCallbackId = recvCallbackId;
     
-    if([_messageBuffer count] > 0 && _flushReceivedBuffer) {
+    if([_messageBuffer count] > 0 && flushRecvBuffer) {
         for(PluginResult *message in _messageBuffer) {
             [_commandDelegate sendPluginResult:pluginResult callbackId:recvCallbackId];
         }
