@@ -21,9 +21,10 @@
 - (void)wsAddListeners:(CDVInvokedUrlCommand*)command;
 {
     NSString* webSocketId = [command argumentAtIndex:0];
+    BOOL flushRecvBuffer = [command argumentAtIndex:1];
     WebSocketAdvanced* ws = [webSockets valueForKey:webSocketId];
     if (ws != nil) {
-        [ws wsAddListeners:command.callbackId];
+        [ws wsAddListeners:command.callbackId flushRecvBuffer:flushRecvBuffer];
     }
 }
 

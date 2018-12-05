@@ -11,13 +11,14 @@
     NSInteger _pingCount;
     NSInteger _pongCount;
     BOOL _awaitingPong;
+    NSMutableArray* _messageBuffer;
 }
 @property NSString* webSocketId;
 
 - (instancetype)initWithOptions:(NSDictionary*)wsOptions 
                 commandDelegate:(id<CDVCommandDelegate>)commandDelegate
                 callbackId:(NSString*)callbackId;
-- (void)wsAddListeners:(NSString*)recvCallbackId;
+- (void)wsAddListeners:(NSString*)recvCallbackId flushRecvBuffer:(BOOL)flushRecvBuffer;
 - (void)wsSendMessage:(NSString*)message;
 - (void)wsClose;
 - (void)wsClose:(NSInteger)code reason:(NSString*)reason;

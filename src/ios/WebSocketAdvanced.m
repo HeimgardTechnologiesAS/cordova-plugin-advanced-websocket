@@ -13,6 +13,8 @@
     NSDictionary* wsHeaders =   [wsOptions valueForKey:@"headers"];
     BOOL acceptAllCerts =       [wsOptions valueForKey:@"acceptAllCerts"];
 
+    _messageBuffer =            [[NSMutableArray alloc] init];
+
     NSTimeInterval timeoutInterval = timeout ? (timeout.doubleValue / 1000) : 0;
     _pingInterval = pingInterval ? (pingInterval.doubleValue / 1000) : 0;
     
@@ -44,9 +46,16 @@
     return self;
 }
 
-- (void)wsAddListeners:(NSString*)recvCallbackId;
+- (void)wsAddListeners:(NSString*)recvCallbackId flushRecvBuffer:(BOOL)flushRecvBuffer;
 {
     _recvCallbackId = recvCallbackId;
+    
+    if([_messageBuffer count] > 0 && flushRecvBuffer) {
+        for(CDVPluginResult* message in _messageBuffer) {
+            [_commandDelegate sendPluginResult:message callbackId:recvCallbackId];
+        }
+    }
+    [_messageBuffer removeAllObjects];
 }
 
 - (void)wsSendMessage:(NSString*)message;
@@ -167,11 +176,15 @@
     [callbackResult setValue:@"onMessage"     forKey:@"callbackMethod"];
     [callbackResult setValue:self.webSocketId forKey:@"webSocketId"];
     [callbackResult setValue:message          forKey:@"message"];
+    
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:callbackResult];
+    [pluginResult setKeepCallbackAsBool:YES];
 
     if (_recvCallbackId != nil) {
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:callbackResult];
-        [pluginResult setKeepCallbackAsBool:YES];
         [_commandDelegate sendPluginResult:pluginResult callbackId:_recvCallbackId];
+    }
+    else {
+        [_messageBuffer addObject:pluginResult];
     }
 }
 
