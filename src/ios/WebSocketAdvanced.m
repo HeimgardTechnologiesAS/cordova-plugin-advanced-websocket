@@ -51,11 +51,11 @@
     _recvCallbackId = recvCallbackId;
     
     if([_messageBuffer count] > 0 && flushRecvBuffer) {
-        for(PluginResult *message in _messageBuffer) {
-            [_commandDelegate sendPluginResult:pluginResult callbackId:recvCallbackId];
+        for(CDVPluginResult* message in _messageBuffer) {
+            [_commandDelegate sendPluginResult:message callbackId:recvCallbackId];
         }
     }
-    _messageBuffer.removeAllObjects();
+    [_messageBuffer removeAllObjects];
 }
 
 - (void)wsSendMessage:(NSString*)message;
@@ -184,7 +184,7 @@
         [_commandDelegate sendPluginResult:pluginResult callbackId:_recvCallbackId];
     }
     else {
-        _messageBuffer.add(pluginResult);
+        [_messageBuffer addObject:pluginResult];
     }
 }
 
