@@ -15,7 +15,7 @@ var CordovaWebsocketPlugin = {
             if (success != undefined && typeof success === "function") {
                 success(data);
             }
-            let flushRecvBuffer = true;
+            var flushRecvBuffer = true;
             exec(listener, listener, PLUGIN_NAME, 'wsAddListeners', [data.webSocketId, flushRecvBuffer]);
         }
         exec(connectSuccess, error, PLUGIN_NAME, 'wsConnect', [wsOptions]);
