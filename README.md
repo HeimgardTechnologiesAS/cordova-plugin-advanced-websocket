@@ -10,6 +10,7 @@ WebSocket plugin that supports custom headers, self-signed certificates, periodi
 
 * Android (uses [OkHttp](https://github.com/square/okhttp) as underlaying library)
 * iOS (uses [SocketRocket](https://github.com/facebook/SocketRocket) as underlaying library)
+* Browser (uses [WebSocket Web API](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) as underlaying library)
 
 ### Android
 
@@ -51,9 +52,9 @@ CordovaWebsocketPlugin.wsConnect(options, receiveCallback, successCallback, fail
 - __options__: Object containing WebSocket url and other properties needed for opening WebSocket:
     - __url__: _string_; Url of WebSocket you want to connect to. This is the only mandatory property in __options__.
     - __timeout?__: _number_; Request timeout in milliseconds. (optional, defaults to 0)
-    - __pingInterval?__: _number_; Ping interval in milliseconds if you want to keep WebSocket open and detect automatically dead WebSocket when Pongs stop returning. If you set it to 0, Pings won't be sent. (optional, defaults to 0)
-    - __headers?__: _object_; Object containing custom request headers you want to send when opening WebSocket. Object keys are used as Header names, and values are used as Header values. (optional)
-    - __acceptAllCerts?__: _boolean_; Set this to true if you are using secure version of WebSocket (url starts with "wss://") and you want to accept all certificates regardles of their validity. Useful when your WebSocket is using self-signed certificates. (optional, defaults to false)
+    - __pingInterval?__: _number_; Ping interval in milliseconds if you want to keep WebSocket open and detect automatically dead WebSocket when Pongs stop returning. If you set it to 0, Pings won't be sent. (optional, defaults to 0. iOS/Android only)
+    - __headers?__: _object_; Object containing custom request headers you want to send when opening WebSocket. Object keys are used as Header names, and values are used as Header values. (optional. iOS/Android only)
+    - __acceptAllCerts?__: _boolean_; Set this to true if you are using secure version of WebSocket (url starts with "wss://") and you want to accept all certificates regardles of their validity. Useful when your WebSocket is using self-signed certificates. (optional, defaults to false. iOS/Android only)
 - __receiveCallback__: Receive callback function that is invoked with every message received through WebSocket and also when WebSocket is closed.
 - __successCallback__: Success callback function that is invoked with successfull connect to WebSocket.
 - __failureCallback__: Error callback function, invoked when connecting to WebSocket failed for whatever reason.
