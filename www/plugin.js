@@ -25,6 +25,9 @@ var CordovaWebsocketPlugin = {
     },
     wsClose: function(wsId, code, reason) {
         exec(null, null, PLUGIN_NAME, 'wsClose', [wsId, code, reason]);
+    },
+    wsCloseAllSockets: function() {
+        exec(null, null, PLUGIN_NAME, 'closeAllSockets', []);
     }
 };
 
