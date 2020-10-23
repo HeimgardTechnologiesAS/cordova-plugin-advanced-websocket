@@ -5,7 +5,8 @@
     "id": "cordova-plugin-advanced-websocket",
     "platforms": [
       "android",
-      "ios"
+      "ios",
+      "browser"
     ]
   },
   "repository": {
@@ -16,7 +17,8 @@
     "cordova",
     "websocket",
     "cordova-ios",
-    "cordova-android"
+    "cordova-android",
+    "cordova-browser"
   ],
   "description": "Cordova Plugin for using WebSockets",
   "author": "HomeControl AS",
