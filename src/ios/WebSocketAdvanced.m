@@ -106,7 +106,13 @@
         }
         _pingCount++;
         _awaitingPong = YES;
-        [_webSocket sendPing:data];
+        @try {
+            [_webSocket sendPing:data];
+        }
+        @catch (NSException *exception) {
+            // Swallow exception 
+            // This fixes race condition where websocket is destroyed and ping is sent to nowhere, what crashes app
+        }
         NSLog(@"Sent ping #%ld", _pingCount);
     }
 }
