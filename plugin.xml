@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     id="cordova-plugin-advanced-websocket"
-    version="1.1.7">
+    version="1.1.8">
     <name>Cordova advanced websocket plugin</name>
     <description></description>
     <license>MIT</license>
@@ -48,8 +48,12 @@
         <header-file src="src/ios/CordovaWebsocketPlugin.h" />
         <source-file src="src/ios/WebSocketAdvanced.m" />
         <source-file src="src/ios/CordovaWebsocketPlugin.m" />
-        
-        <framework src="SocketRocket" type="podspec" spec="0.5.1" />
+
+        <podspec>
+            <pods use-frameworks="true">
+                <pod name="SocketRocket" spec="0.5.1" />
+            </pods>
+        </podspec>
     </platform>
 
     <!-- browser -->
