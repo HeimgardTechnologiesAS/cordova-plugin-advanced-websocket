@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HomeControlAS/cordova-plugin-advanced-websocket.git"
+    "url": "git+https://github.com/HeimgardTechnologiesAS/cordova-plugin-advanced-websocket.git"
   },
   "keywords": [
     "cordova",
@@ -21,6 +21,6 @@
     "cordova-browser"
   ],
   "description": "Cordova Plugin for using WebSockets",
-  "author": "HomeControl AS",
+  "author": "HeimgardTechnologies AS",
   "license": "MIT"
 }
